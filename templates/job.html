@@ -1,0 +1,225 @@
+  <html>
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="msapplication-tap-highlight" content="no">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.drag-area{
+  background: #fff;
+  margin-top: 32px;
+  border: 2px dashed #1565c0;
+  border-radius: 8px;
+  width: 100%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.drag-area.active{
+  border: 2px solid #1565c0;
+}
+.drag-area .icon{
+  font-size: 100px;
+  color: #1565c0;
+}
+.drag-area header{
+  font-size: 12px;
+  font-weight: 500;
+  color: #1565c0;
+}
+.drag-area span{
+  font-size: 18px;
+  font-weight: 500;
+  color: #1565c0;
+  margin: 10px 0 10px 0;
+}
+.drag-area button{
+  padding: 10px 25px;
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  background: #1565c0;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+    </style>
+   
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    </head>
+
+    <body>
+<header>
+
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark blue darken-3 scrolling-navbar">
+    <a class="navbar-brand" href="#"><strong>Job Finder</strong></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About us</a>
+        </li>
+      </ul>
+      
+    </div>
+  </nav>
+
+</header>
+<br><br><br>
+<form action="/"method="post" enctype="multipart/form-data">
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <div id="myform" class="form-group  shadow-textarea">
+  <textarea style="margin-top:32px" name="resume_text" placeholder="Type or Paste here" class="form-control" id="resume_text" rows="15"></textarea>
+</div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+  <div class="drag-area">
+    <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+    <header>Drag & Drop to Upload File</header>
+    <span>OR</span>
+    <button>Browse File</button>
+    
+  </div>
+  <input id="file" type="file" name="file" autocomplete="off" hidden>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-4 col-sm-1"></div>
+    <div class="col-md-4 col-sm-10">
+      <button class="btn btn-info btn-block my-4 blue darken-3" type="submit">Check</button>
+    </div>
+    <div class="col-md-4 col-sm-1"></div>
+  </div>
+</div>
+
+</form>
+<p>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+</p>
+
+
+ <script>
+
+const dropArea = document.querySelector(".drag-area"),
+dragText = dropArea.querySelector("header"),
+button = dropArea.querySelector("button"),
+input = document.querySelector("#file");
+let file; //this is a global variable and we'll use it inside multiple functions
+
+button.onclick = (event)=>{
+  event.preventDefault(); 
+  input.click();
+}
+
+input.addEventListener("change", function(){
+  //getting user select file and [0] this means if user select multiple files then we'll select only the first one
+  file = this.files[0];
+  dropArea.classList.add("active");
+  showFile(); //calling function
+});
+
+
+//If user Drag File Over DropArea
+dropArea.addEventListener("dragover", (event)=>{
+  event.preventDefault(); //preventing from default behaviour
+  dropArea.classList.add("active");
+  dragText.textContent = "Release to Upload File";
+});
+
+//If user leave dragged File from DropArea
+dropArea.addEventListener("dragleave", ()=>{
+  dropArea.classList.remove("active");
+  dragText.textContent = "Drag & Drop to Upload File";
+});
+
+//If user drop File on DropArea
+dropArea.addEventListener("drop", (event)=>{
+  event.preventDefault(); //preventing from default behaviour
+  //getting user select file and [0] this means if user select multiple files then we'll select only the first one
+
+  file = event.dataTransfer.files[0];
+  $("input[type='file']").prop("files",event.dataTransfer.files);
+  showFile(); //calling function
+});
+
+function showFile(){
+  let fileType = file.type; 
+  let validExtensions = ["text/plain", "application/pdf", "application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document"]; //adding some valid image extensions in array
+  if(validExtensions.includes(fileType)){ 
+      let Tag = `<b>`+file.name+`</b>`; 
+      dropArea.innerHTML = Tag; 
+  }else{
+    alert("Upload only txt, pdf or doc documents only");
+    dropArea.classList.remove("active");
+    dragText.textContent = "Drag & Drop to Upload File";
+  }
+}
+
+/*  $("#myform").submit(function(e) {
+    e.preventDefault();
+    var url="http://127.0.0.1:5000/";
+    var text= $('#resume_text').val();
+    var form_data = $('#file').prop('files')[0];
+    $.ajax({url:url,
+            type: 'POST',
+            url: url+'process',
+            data: {files:form_data,resume_text:text},
+            contentType: false,
+            cache: false,
+            processData: false,
+    success: function(data, status){
+      var v=parseFloat(JSON.stringify(data['p']));
+    $('p').html(v);
+  }});
+});*/
+    </script>
+    </body>
+  </html>    
